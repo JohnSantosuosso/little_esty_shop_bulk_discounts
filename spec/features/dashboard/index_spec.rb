@@ -43,7 +43,7 @@ RSpec.describe 'merchant dashboard' do
 
     @discount_1 = Discount.create!(percentage: 10, quantity_threshold: 5, merchant_id: @merchant1.id)
     @discount_2 = Discount.create!(percentage: 5, quantity_threshold: 2, merchant_id: @merchant1.id)
-    @discount_3 = Discount.create!(percentage: 33, quantity_threshold: 3, merchant_id: @merchant2.id)
+    @discount_3 = Discount.create!(percentage: 33, quantity_threshold: 90233, merchant_id: @merchant2.id)
 
     visit merchant_dashboard_index_path(@merchant1)
   end

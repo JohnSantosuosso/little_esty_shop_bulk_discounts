@@ -5,4 +5,8 @@ class DiscountsController < ApplicationController
     
   end
 
+  def new
+
+  end
+
 end
