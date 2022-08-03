@@ -40,6 +40,9 @@ RSpec.describe 'merchant dashboard' do
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
 
+    @discount_1 = Discount.create!(percentage: 10, quantity_threshold: 5, merchant_id: @merchant1.id)
+    @discount_2 = Discount.create!(percentage: 5, quantity_threshold: 2, merchant_id: @merchant1.id)
+
     visit merchant_dashboard_index_path(@merchant1)
   end
 
@@ -123,6 +126,6 @@ RSpec.describe 'merchant dashboard' do
   it "clicks a link and is taken to a page with all merchant's discounts" do
     click_link("View All Discounts")
 
-    expect(current_path).to eql("/merchant/#{@merchant.id}/discounts")
+    expect(current_path).to eql("/merchant/#{@merchant1.id}/discounts")
   end
 end
