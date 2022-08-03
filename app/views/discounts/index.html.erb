@@ -1,0 +1,7 @@
+<h1>Discounts Index Page</h1>
+<% @merchant.discounts.each do |discount| %>
+<div id="discount-<%= discount.id %>">
+<p><%= discount.percentage %></p>
+<p><%= discount.quantity_threshold %></p>
+</div>
+<% end %>
