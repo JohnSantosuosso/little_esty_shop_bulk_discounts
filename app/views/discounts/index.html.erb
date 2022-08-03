@@ -3,5 +3,6 @@
 <div id="discount-<%= discount.id %>">
 <p><%= discount.percentage %></p>
 <p><%= discount.quantity_threshold %></p>
+<p><%= link_to "View #{discount.id}", "/merchant/#{@merchant.id}/discount/#{discount.id}" %></p>
 </div>
 <% end %>

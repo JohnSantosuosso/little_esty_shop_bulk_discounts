@@ -134,14 +134,17 @@ RSpec.describe 'merchant dashboard' do
     within("#discount-#{@discount_1.id}") do
     expect(page).to have_content(@discount_1.percentage)
     expect(page).to have_content(@discount_1.quantity_threshold)
+    expect(page).to have_link("View #{@discount_1.id}")
     end
 
     within("#discount-#{@discount_2.id}") do
     expect(page).to have_content(@discount_2.percentage)
     expect(page).to have_content(@discount_2.quantity_threshold)
+    expect(page).to have_link("View #{@discount_2.id}")
     end
 
     expect(page).to have_no_content(@discount_3.percentage)
     expect(page).to have_no_content(@discount_3.quantity_threshold)
+    expect(page).to have_no_link("View #{@discount_3.id}")
   end
 end
