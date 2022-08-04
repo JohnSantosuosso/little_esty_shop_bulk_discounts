@@ -58,7 +58,7 @@ RSpec.describe 'merchant discounts index' do
 
   it 'shows a link next to each discount to delete it, and when link is clicked, it returns the discounts index page and the discount is no longer there' do
     expect(page).to have_content(@discount_1.id)
-    expect(page).to have_link("Delete #{@discount_1.id}")
+    expect(page).to have_button("Delete #{@discount_1.id}")
     
     click_on "Delete #{@discount_1.id}"
 

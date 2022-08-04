@@ -1,13 +1,16 @@
 class DiscountsController < ApplicationController
-  before_action :find_merchant, only: [:index, :show, :new, :create, :destroy, :edit, :update]
+   before_action :find_merchant_and_discount, only: [:update]
 
   def index
+    @merchant = find_merchant
   end
 
   def new
+    @merchant = find_merchant
   end
 
   def create
+    @merchant = find_merchant
     @discount = @merchant.discounts.new(discount_params)
     if @discount.save
       redirect_to merchant_discounts_path(@merchant)
@@ -18,21 +21,23 @@ class DiscountsController < ApplicationController
   end
 
   def destroy
-    discount = Discount.find(params[:id])
-    discount.destroy
+    @merchant = find_merchant
+    @discount = Discount.find(params[:id])
+    @discount.destroy
     redirect_to merchant_discounts_path(@merchant)
   end
 
   def show
-    @discount = Discount.find(params[:id])
+    @merchant = find_merchant
+    @discount = find_discount
   end
 
   def edit
-    @discount = Discount.find(params[:id])
+    @merchant = find_merchant
+    @discount = find_discount
   end
 
   def update
-    @discount = Discount.find(params[:id])
     @discount.update(discount_params)
     if @discount.save
       redirect_to merchant_discounts_path(@merchant)
@@ -44,6 +49,19 @@ class DiscountsController < ApplicationController
   end
 
   private
+  def find_merchant
+    Merchant.find(params[:merchant_id])
+  end
+
+  def find_discount
+    Discount.find(params[:id])
+  end
+
+  def find_merchant_and_discount
+    @merchant = find_merchant
+    @discount = find_discount
+  end
+
   def discount_params
     params.permit(:percentage, :quantity_threshold)
   end
