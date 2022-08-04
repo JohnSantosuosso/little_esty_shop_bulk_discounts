@@ -63,4 +63,40 @@ RSpec.describe 'edit merchant discount' do
     expect(page).to have_no_content('16%')
     expect(page).to have_no_content('15 units')
   end
+
+  it "prevents bad input from being fed into the update form" do
+    expect(page).to have_field('Percentage', with: 16)
+    expect(page).to have_field('Quantity threshold', with: 15)
+    
+    fill_in 'Percentage', with: "Batman"
+    fill_in 'Quantity threshold', with: 6
+    click_button 'Update Discount'
+
+    expect(current_path).to eq(edit_merchant_discount_path(@merchant1, @discount_1))
+    expect(page).to have_field('Percentage', with: 16)
+    expect(page).to have_field('Quantity threshold', with: 15)
+
+    expect(page).to have_content('Error Percentage is not a number')
+
+    fill_in 'Percentage', with: 110
+    fill_in 'Quantity threshold', with: 6
+    click_button 'Update Discount'
+
+    expect(current_path).to eq(edit_merchant_discount_path(@merchant1, @discount_1))
+    expect(page).to have_content('Error Percentage must be less than or equal to 100')
+
+    fill_in 'Percentage', with: 45
+    fill_in 'Quantity threshold', with: "Batman"
+    click_button 'Update Discount'
+
+    expect(current_path).to eq(edit_merchant_discount_path(@merchant1, @discount_1))
+    expect(page).to have_content('Error Quantity threshold is not a number')
+
+    fill_in 'Percentage', with: 45
+    fill_in 'Quantity threshold', with: -20
+    click_button 'Update Discount'
+
+    expect(current_path).to eq(edit_merchant_discount_path(@merchant1, @discount_1))
+    expect(page).to have_content('Error Quantity threshold must be greater than or equal to 0')
+  end
 end
