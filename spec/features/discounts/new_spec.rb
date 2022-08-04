@@ -45,13 +45,12 @@ RSpec.describe 'Create New Discount Page' do
     @discount_2 = Discount.create!(percentage: 5, quantity_threshold: 2, merchant_id: @merchant1.id)
     @discount_3 = Discount.create!(percentage: 33, quantity_threshold: 90233, merchant_id: @merchant2.id)
     
-    visit "/merchant/#{@merchant_1.id}/discounts/new"
+    visit "/merchant/#{@merchant1.id}/discounts/new"
   end
 
-  describe "when I complete a new discount with valid, I am redirected to the merchant's discounts page" do
-
+  it "completes a new discount with valid, I am redirected to the merchant's discounts page" do
     fill_in("Percentage", with: 21)
-    fill_in("Quantity Threshold", with: 35)
+    fill_in("Quantity threshold", with: 35)
 
     click_on 'Submit'
 
