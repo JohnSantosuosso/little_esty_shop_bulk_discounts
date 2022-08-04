@@ -48,7 +48,7 @@ RSpec.describe 'Create New Discount Page' do
     visit "/merchant/#{@merchant1.id}/discounts/new"
   end
 
-  it "completes a new discount with valid, I am redirected to the merchant's discounts page" do
+  it "completes a new discount with valid data, I am redirected to the merchant's discounts page" do
     fill_in("Percentage", with: 21)
     fill_in("Quantity threshold", with: 35)
 
@@ -58,5 +58,48 @@ RSpec.describe 'Create New Discount Page' do
 
     expect(page).to have_content(21)
     expect(page).to have_content(35)
+  end
+
+  it "does not accept a new discount with invalid data, and redirects to the new page with an error message" do
+    fill_in("Percentage", with: "Batman")
+    fill_in("Quantity threshold", with: 35)
+
+    click_on 'Submit'
+
+    expect(current_path).to eq(new_merchant_discount_path(@merchant1))
+    expect(page).to have_content("Error Percentage is not a number")
+
+    fill_in("Percentage", with: 110)
+    fill_in("Quantity threshold", with: 35)
+
+    click_on 'Submit'
+
+    expect(current_path).to eq(new_merchant_discount_path(@merchant1))
+    expect(page).to have_content("Error Percentage must be less than or equal to 100")
+
+    fill_in("Percentage", with: 30)
+    fill_in("Quantity threshold", with: "Batman")
+
+    click_on 'Submit'
+
+    expect(current_path).to eq(new_merchant_discount_path(@merchant1))
+    expect(page).to have_content("Error Quantity threshold is not a number")
+
+    fill_in("Percentage", with: 30)
+    fill_in("Quantity threshold", with: -1)
+
+    click_on 'Submit'
+
+    expect(current_path).to eq(new_merchant_discount_path(@merchant1))
+    expect(page).to have_content("Error Quantity threshold must be greater than or equal to 0")
+
+    fill_in("Percentage", with: 30)
+    fill_in("Quantity threshold", with: "")
+
+    click_on 'Submit'
+
+    expect(current_path).to eq(new_merchant_discount_path(@merchant1))
+    expect(page).to have_content("rror Quantity threshold can't be blank, Quantity threshold is not a number")
+
   end
 end

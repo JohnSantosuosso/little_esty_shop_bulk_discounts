@@ -12,7 +12,7 @@ class DiscountsController < ApplicationController
     if @discount.save
       redirect_to merchant_discounts_path(@merchant)
     else
-      render :new
+      redirect_to new_merchant_discount_path(@merchant)
       flash[:error] = "Error #{@discount.errors.full_messages.join(", ")}"
     end
   end
