@@ -5,7 +5,7 @@
 <p>Percentage: <%= discount.percentage %>%</p>
 <p>Quantity Threshold: <%= discount.quantity_threshold %> units</p>
 <p><%= link_to "View #{discount.id}", "/merchant/#{@merchant.id}/discounts/#{discount.id}" %></p>
-<p><%= link_to "Delete #{discount.id}", "/merchant/#{@merchant.id}/discounts/#{discount.id}", method: :delete %></p>
+<p><%= button_to "Delete #{discount.id}", "/merchant/#{@merchant.id}/discounts/#{discount.id}", method: :delete %></p>
 <br>
 </div>
 <% end %>

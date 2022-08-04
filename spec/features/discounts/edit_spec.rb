@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'merchant discounts show' do
+RSpec.describe 'edit merchant discount' do
   before :each do
     @merchant1 = Merchant.create!(name: 'Hair Care')
     @merchant2 = Merchant.create!(name: 'Nail Salon')
@@ -41,26 +41,26 @@ RSpec.describe 'merchant discounts show' do
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
 
-    @discount_1 = Discount.create!(percentage: 10, quantity_threshold: 44, merchant_id: @merchant1.id)
-    @discount_2 = Discount.create!(percentage: 45, quantity_threshold: 72, merchant_id: @merchant1.id)
+    @discount_1 = Discount.create!(percentage: 16, quantity_threshold: 15, merchant_id: @merchant1.id)
+    @discount_2 = Discount.create!(percentage: 5, quantity_threshold: 2, merchant_id: @merchant1.id)
     @discount_3 = Discount.create!(percentage: 33, quantity_threshold: 90233, merchant_id: @merchant2.id)
 
-    visit merchant_discount_path(@merchant1, @discount_1)
+    visit edit_merchant_discount_path(@merchant1, @discount_1)
   end
 
-  it "shows a merchant's discount's percentage and quantity threshold" do
-    expect(page).to have_content(@discount_1.id)
-    expect(page).to have_content(@discount_1.percentage)
-    expect(page).to have_content(@discount_1.quantity_threshold)
+  it "shows the discount's current information is filled in, and when any/all information is changed, it redirects to the discounts index and the discount has been updated" do
+    expect(page).to have_field('Percentage', with: 16)
+    expect(page).to have_field('Quantity threshold', with: 15)
+    
+    fill_in 'Percentage', with: 20
+    fill_in 'Quantity threshold', with: 6
+    click_button 'Update Discount'
 
-    expect(page).to have_no_content(@discount_2.id)
-    expect(page).to have_no_content(@discount_2.percentage)
-    expect(page).to have_no_content(@discount_2.quantity_threshold)
-  end
+    expect(current_path).to eq(merchant_discounts_path(@merchant1))
+    expect(page).to have_content('20%')
+    expect(page).to have_content('6 units')
 
-  it "has a link to edit the discount and when the link is clicked, it takes you to the edit discount page" do
-    click_on "Edit Discount"
-
-    expect(current_path).to eq(edit_merchant_discount_path(@merchant1, @discount_1))
+    expect(page).to have_no_content('16%')
+    expect(page).to have_no_content('15 units')
   end
 end
