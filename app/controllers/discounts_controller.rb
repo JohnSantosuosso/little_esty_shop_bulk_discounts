@@ -23,6 +23,10 @@ class DiscountsController < ApplicationController
     redirect_to merchant_discounts_path(@merchant)
   end
 
+  def show
+    @discount = Discount.find(params[:id])
+  end
+
   private
   def discount_params
     params.permit(:percentage, :quantity_threshold)
