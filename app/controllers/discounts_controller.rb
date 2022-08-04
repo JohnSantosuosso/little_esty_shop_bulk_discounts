@@ -1,5 +1,5 @@
 class DiscountsController < ApplicationController
-  before_action :find_merchant, only: [:index, :show, :new, :create]
+  before_action :find_merchant, only: [:index, :show, :new, :create, :destroy]
 
   def index
   end
@@ -15,6 +15,12 @@ class DiscountsController < ApplicationController
       redirect_to new_merchant_discount_path(@merchant)
       flash[:error] = "Error #{@discount.errors.full_messages.join(", ")}"
     end
+  end
+
+  def destroy
+    @discount = Discount.find(params[:id])
+    @discount.destroy
+    redirect_to merchant_discounts_path(@merchant)
   end
 
   private
