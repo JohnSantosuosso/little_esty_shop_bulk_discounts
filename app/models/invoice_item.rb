@@ -17,10 +17,10 @@ class InvoiceItem < ApplicationRecord
   end
 
   def has_discount?
-    if self.quantity >= self.item.discounts.first.quantity_threshold
-      true
-    else
+    if self.discounts.first.quantity_threshold > self.quantity
       false
+    else
+      true
     end
   end
 end
