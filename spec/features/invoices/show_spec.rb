@@ -93,11 +93,22 @@ RSpec.describe 'invoices show' do
       click_button "Update Invoice"
 
       expect(page).to have_content("cancelled")
-     end
+    end
 
-     within("#current-invoice-status") do
+    within("#current-invoice-status") do
        expect(page).to_not have_content("in progress")
-     end
+    end
+  end
+
+  it "shows the discounted revenue for this invoice" do
+    @discount_1 = Discount.create!(percentage: 10, quantity_threshold: 1, merchant_id: @merchant1.id)
+    @discount_2 = Discount.create!(percentage: 20, quantity_threshold: 2, merchant_id: @merchant1.id)
+
+    visit merchant_invoice_path(@merchant1, @invoice_1)
+    within("#revenues") do
+      expect(page).to have_content(@invoice_1.total_discounted_revenue)
+      expect(page).to_not have_content(@invoice_2.total_discounted_revenue)
+    end
   end
 
 end

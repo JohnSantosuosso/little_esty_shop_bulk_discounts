@@ -1,0 +1,13 @@
+<h1>Discounts Index Page</h1>
+<% @merchant.discounts.each do |discount| %>
+<div id="discount-<%= discount.id %>">
+<p>Discount ID: <%= discount.id %></p>
+<p>Percentage: <%= discount.percentage %>%</p>
+<p>Quantity Threshold: <%= discount.quantity_threshold %> units</p>
+<p><%= link_to "View #{discount.id}", "/merchant/#{@merchant.id}/discounts/#{discount.id}" %></p>
+<p><%= button_to "Delete #{discount.id}", "/merchant/#{@merchant.id}/discounts/#{discount.id}", method: :delete %></p>
+<br>
+</div>
+<% end %>
+
+<p><%= link_to "Create Discount", "/merchant/#{@merchant.id}/discounts/new" %></p>

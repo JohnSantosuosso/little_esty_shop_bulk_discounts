@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe 'merchant dashboard' do
   before :each do
     @merchant1 = Merchant.create!(name: 'Hair Care')
+    @merchant2 = Merchant.create!(name: 'Nail Salon')
 
     @customer_1 = Customer.create!(first_name: 'Joey', last_name: 'Smith')
     @customer_2 = Customer.create!(first_name: 'Cecilia', last_name: 'Jones')
@@ -39,6 +40,10 @@ RSpec.describe 'merchant dashboard' do
     @transaction5 = Transaction.create!(credit_card_number: 102938, result: 1, invoice_id: @invoice_6.id)
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
+
+    @discount_1 = Discount.create!(percentage: 10, quantity_threshold: 5, merchant_id: @merchant1.id)
+    @discount_2 = Discount.create!(percentage: 5, quantity_threshold: 2, merchant_id: @merchant1.id)
+    @discount_3 = Discount.create!(percentage: 33, quantity_threshold: 90233, merchant_id: @merchant2.id)
 
     visit merchant_dashboard_index_path(@merchant1)
   end
@@ -118,5 +123,28 @@ RSpec.describe 'merchant dashboard' do
 
   it "shows the date that the invoice was created in this format: Monday, July 18, 2019" do
     expect(page).to have_content(@invoice_1.created_at.strftime("%A, %B %-d, %Y"))
+  end
+
+  it "clicks a link and is taken to a page with all merchant's discounts, including their percentage and threshold, and link to each discount's page" do
+    
+    click_link("View All Discounts")
+
+    expect(current_path).to eql("/merchant/#{@merchant1.id}/discounts")
+
+    within("#discount-#{@discount_1.id}") do
+    expect(page).to have_content(@discount_1.percentage)
+    expect(page).to have_content(@discount_1.quantity_threshold)
+    expect(page).to have_link("View #{@discount_1.id}")
+    end
+
+    within("#discount-#{@discount_2.id}") do
+    expect(page).to have_content(@discount_2.percentage)
+    expect(page).to have_content(@discount_2.quantity_threshold)
+    expect(page).to have_link("View #{@discount_2.id}")
+    end
+
+    expect(page).to have_no_content(@discount_3.percentage)
+    expect(page).to have_no_content(@discount_3.quantity_threshold)
+    expect(page).to have_no_link("View #{@discount_3.id}")
   end
 end

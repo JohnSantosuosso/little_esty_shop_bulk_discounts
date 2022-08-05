@@ -1,4 +1,7 @@
+require 'rails_helper'
 
+RSpec.describe 'merchant discounts index' do
+  before :each do
     @merchant1 = Merchant.create!(name: 'Hair Care')
     @merchant2 = Merchant.create!(name: 'Nail Salon')
 
@@ -22,7 +25,7 @@
     @item_3 = Item.create!(name: "Brush", description: "This takes out tangles", unit_price: 5, merchant_id: @merchant1.id)
     @item_4 = Item.create!(name: "Hair tie", description: "This holds up your hair", unit_price: 1, merchant_id: @merchant1.id)
 
-    @ii_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 10, unit_price: 10, status: 0)
+    @ii_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 1, unit_price: 10, status: 0)
     @ii_2 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_2.id, quantity: 1, unit_price: 8, status: 0)
     @ii_3 = InvoiceItem.create!(invoice_id: @invoice_2.id, item_id: @item_3.id, quantity: 1, unit_price: 5, status: 2)
     @ii_4 = InvoiceItem.create!(invoice_id: @invoice_3.id, item_id: @item_4.id, quantity: 1, unit_price: 5, status: 1)
@@ -38,6 +41,28 @@
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
 
-    @discount_1 = Discount.create!(percentage: 10, quantity_threshold: 10, merchant_id: @merchant1.id)
+    @discount_1 = Discount.create!(percentage: 10, quantity_threshold: 5, merchant_id: @merchant1.id)
     @discount_2 = Discount.create!(percentage: 5, quantity_threshold: 2, merchant_id: @merchant1.id)
     @discount_3 = Discount.create!(percentage: 33, quantity_threshold: 90233, merchant_id: @merchant2.id)
+
+    visit merchant_discounts_path(@merchant1)
+  end
+
+  it 'shows a link to create a new discount and when link is clicked, it takes you to new page to add a new discount' do
+    expect(page).to have_link('Create Discount')
+
+    click_on 'Create Discount'
+
+    expect(current_path).to eq(new_merchant_discount_path(@merchant1))
+  end
+
+  it 'shows a link next to each discount to delete it, and when link is clicked, it returns the discounts index page and the discount is no longer there' do
+    expect(page).to have_content(@discount_1.id)
+    expect(page).to have_button("Delete #{@discount_1.id}")
+    
+    click_on "Delete #{@discount_1.id}"
+
+    expect(page).to have_no_content(@discount_1.id)
+    expect(page).to have_content(@discount_2.id)
+  end
+end

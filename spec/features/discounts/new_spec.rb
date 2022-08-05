@@ -1,4 +1,7 @@
+require 'rails_helper'
 
+RSpec.describe 'Create New Discount Page' do
+    before :each do
     @merchant1 = Merchant.create!(name: 'Hair Care')
     @merchant2 = Merchant.create!(name: 'Nail Salon')
 
@@ -22,7 +25,7 @@
     @item_3 = Item.create!(name: "Brush", description: "This takes out tangles", unit_price: 5, merchant_id: @merchant1.id)
     @item_4 = Item.create!(name: "Hair tie", description: "This holds up your hair", unit_price: 1, merchant_id: @merchant1.id)
 
-    @ii_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 10, unit_price: 10, status: 0)
+    @ii_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 1, unit_price: 10, status: 0)
     @ii_2 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_2.id, quantity: 1, unit_price: 8, status: 0)
     @ii_3 = InvoiceItem.create!(invoice_id: @invoice_2.id, item_id: @item_3.id, quantity: 1, unit_price: 5, status: 2)
     @ii_4 = InvoiceItem.create!(invoice_id: @invoice_3.id, item_id: @item_4.id, quantity: 1, unit_price: 5, status: 1)
@@ -38,6 +41,65 @@
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
 
-    @discount_1 = Discount.create!(percentage: 10, quantity_threshold: 10, merchant_id: @merchant1.id)
+    @discount_1 = Discount.create!(percentage: 10, quantity_threshold: 5, merchant_id: @merchant1.id)
     @discount_2 = Discount.create!(percentage: 5, quantity_threshold: 2, merchant_id: @merchant1.id)
     @discount_3 = Discount.create!(percentage: 33, quantity_threshold: 90233, merchant_id: @merchant2.id)
+    
+    visit "/merchant/#{@merchant1.id}/discounts/new"
+  end
+
+  it "completes a new discount with valid data, I am redirected to the merchant's discounts page" do
+    fill_in("Percentage", with: 21)
+    fill_in("Quantity threshold", with: 35)
+
+    click_on 'Submit'
+
+    expect(current_path).to eq(merchant_discounts_path(@merchant1))
+
+    expect(page).to have_content(21)
+    expect(page).to have_content(35)
+  end
+
+  it "does not accept a new discount with invalid data, and redirects to the new page with an error message" do
+    fill_in("Percentage", with: "Batman")
+    fill_in("Quantity threshold", with: 35)
+
+    click_on 'Submit'
+
+    expect(current_path).to eq(new_merchant_discount_path(@merchant1))
+    expect(page).to have_content("Error Percentage is not a number")
+
+    fill_in("Percentage", with: 110)
+    fill_in("Quantity threshold", with: 35)
+
+    click_on 'Submit'
+
+    expect(current_path).to eq(new_merchant_discount_path(@merchant1))
+    expect(page).to have_content("Error Percentage must be less than or equal to 100")
+
+    fill_in("Percentage", with: 30)
+    fill_in("Quantity threshold", with: "Batman")
+
+    click_on 'Submit'
+
+    expect(current_path).to eq(new_merchant_discount_path(@merchant1))
+    expect(page).to have_content("Error Quantity threshold is not a number")
+
+    fill_in("Percentage", with: 30)
+    fill_in("Quantity threshold", with: -1)
+
+    click_on 'Submit'
+
+    expect(current_path).to eq(new_merchant_discount_path(@merchant1))
+    expect(page).to have_content("Error Quantity threshold must be greater than or equal to 0")
+
+    fill_in("Percentage", with: 30)
+    fill_in("Quantity threshold", with: "")
+
+    click_on 'Submit'
+
+    expect(current_path).to eq(new_merchant_discount_path(@merchant1))
+    expect(page).to have_content("rror Quantity threshold can't be blank, Quantity threshold is not a number")
+
+  end
+end
