@@ -69,4 +69,14 @@ describe 'Admin Invoices Index Page' do
       expect(@i1.status).to eq('complete')
     end
   end
+
+  it "shows the discounted revenue for this invoice" do
+    @discount_1 = Discount.create!(percentage: 10, quantity_threshold: 10, merchant_id: @m1.id)
+    @discount_2 = Discount.create!(percentage: 20, quantity_threshold: 20, merchant_id: @m1.id)
+
+    visit admin_invoice_path(@i1)
+
+    expect(page).to have_content(@i1.total_discounted_revenue)
+    expect(page).to_not have_content(@i2.total_discounted_revenue)
+  end
 end
