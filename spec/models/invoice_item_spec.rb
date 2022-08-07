@@ -49,5 +49,12 @@ RSpec.describe InvoiceItem, type: :model do
       expect(@ii_3.has_discount?).to eq(false)
       expect(@ii_4.has_discount?).to eq(false)
     end
+
+    it 'get_discount' do
+      expect(@ii_1.get_discount).to eq(@discount_1)
+      expect(@ii_2.get_discount).to eq(nil)
+      expect(@ii_3.get_discount).to eq(nil)
+      expect(@ii_4.get_discount).to eq(nil)
+    end
   end
 end

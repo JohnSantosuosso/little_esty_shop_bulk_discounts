@@ -39,5 +39,5 @@
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
 
     @discount_1 = Discount.create!(percentage: 10, quantity_threshold: 10, merchant_id: @merchant1.id)
-    @discount_2 = Discount.create!(percentage: 5, quantity_threshold: 2, merchant_id: @merchant1.id)
+    @discount_2 = Discount.create!(percentage: 5, quantity_threshold: 20, merchant_id: @merchant1.id)
     @discount_3 = Discount.create!(percentage: 33, quantity_threshold: 90233, merchant_id: @merchant2.id)

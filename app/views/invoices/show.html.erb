@@ -54,7 +54,9 @@
                                             <%= f.select :status, Invoice.statuses.keys, selected: "#{@invoice.status}" %>
                                             <%= f.submit 'Update Invoice' %>   
             <% if i.has_discount? == true %>
-            <td><%= link_to 'View Discount', merchant_discount_path(@merchant, i.id)%></td>
+            <td><%= link_to 'View Discount', merchant_discount_path(@merchant, (i.get_discount).id)%></td>
+            <% else %>
+            <td>No Discount</td>
             <% end %>
             <% end %></td><br/>
           </tr>
