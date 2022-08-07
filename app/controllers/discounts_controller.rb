@@ -3,6 +3,7 @@ class DiscountsController < ApplicationController
 
   def index
     @merchant = find_merchant
+    @holidays = HolidayFacade.holidays_dates.compact.first(3)
   end
 
   def new
