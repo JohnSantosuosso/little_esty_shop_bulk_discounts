@@ -122,7 +122,6 @@ RSpec.describe 'invoices show' do
 
     within("#the-status-#{@ii_11.id}") do
       expect(page).to have_link("View Discount")
-      save_and_open_page
       click_link("View Discount")
       expect(current_path).to eq("/merchant/#{@merchant1.id}/discounts/#{@discount_1.id}")
     end
