@@ -65,4 +65,13 @@ RSpec.describe 'merchant discounts index' do
     expect(page).to have_no_content(@discount_1.id)
     expect(page).to have_content(@discount_2.id)
   end
+
+  it 'shows the next three upcoming US holidays by accessing the Nager API' do
+    within "#upcoming-holidays" do
+      expect(page).to have_content("Labour Day")
+      expect(page).to have_content("Columbus Day")
+      expect(page).to have_content("Veterans Day")
+      expect(page).to have_no_content("Christmas")
+    end
+  end
 end
