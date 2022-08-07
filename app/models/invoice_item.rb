@@ -17,10 +17,18 @@ class InvoiceItem < ApplicationRecord
   end
 
   def has_discount?
-    if self.discounts.exists? && self.discounts.first.quantity_threshold <= self.quantity
-      true
-    else
+    if self.get_discount.nil?
       false
+    else
+      true
     end
   end
+
+  def get_discount
+   discounts
+    .where("discounts.quantity_threshold <= ?", quantity)
+    .order("percentage desc")
+    .first
+  end
+
 end
