@@ -17,10 +17,17 @@
     @invoice_6 = Invoice.create!(customer_id: @customer_5.id, status: 2)
     @invoice_7 = Invoice.create!(customer_id: @customer_6.id, status: 1)
 
+    @invoice_8 = Invoice.create!(customer_id: @customer_1.id, status: 2)
+    @invoice_9 = Invoice.create!(customer_id: @customer_1.id, status: 2)
+
     @item_1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant1.id)
     @item_2 = Item.create!(name: "Conditioner", description: "This makes your hair shiny", unit_price: 8, merchant_id: @merchant1.id)
     @item_3 = Item.create!(name: "Brush", description: "This takes out tangles", unit_price: 5, merchant_id: @merchant1.id)
     @item_4 = Item.create!(name: "Hair tie", description: "This holds up your hair", unit_price: 1, merchant_id: @merchant1.id)
+
+    @item_5 = Item.create!(name: "Nail Polish", description: "This makes your nails pretty", unit_price: 15, merchant_id: @merchant2.id)
+    @item_6 = Item.create!(name: "Nail Polish Remover", description: "This removes nail polish", unit_price: 5, merchant_id: @merchant2.id)
+    @item_7 = Item.create!(name: "Nail Glitter", description: "This lets you decorate your nails", unit_price: 3, merchant_id: @merchant2.id)
 
     @ii_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 10, unit_price: 10, status: 0)
     @ii_2 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_2.id, quantity: 1, unit_price: 8, status: 0)
@@ -30,6 +37,10 @@
     @ii_6 = InvoiceItem.create!(invoice_id: @invoice_5.id, item_id: @item_4.id, quantity: 1, unit_price: 5, status: 1)
     @ii_7 = InvoiceItem.create!(invoice_id: @invoice_6.id, item_id: @item_4.id, quantity: 1, unit_price: 5, status: 1)
 
+    @ii_8 = InvoiceItem.create!(invoice_id: @invoice_8.id, item_id: @item_5.id, quantity: 1, unit_price: 15, status: 1)
+    @ii_9 = InvoiceItem.create!(invoice_id: @invoice_9.id, item_id: @item_6.id, quantity: 10, unit_price: 5, status: 1)
+    @ii_10 = InvoiceItem.create!(invoice_id: @invoice_9.id, item_id: @item_7.id, quantity: 1, unit_price: 3, status: 1)
+
     @transaction1 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_1.id)
     @transaction2 = Transaction.create!(credit_card_number: 230948, result: 1, invoice_id: @invoice_3.id)
     @transaction3 = Transaction.create!(credit_card_number: 234092, result: 1, invoice_id: @invoice_4.id)
@@ -38,6 +49,9 @@
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
 
+    @transaction8 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_8.id)
+    @transaction9 = Transaction.create!(credit_card_number: 230948, result: 1, invoice_id: @invoice_9.id)
+
     @discount_1 = Discount.create!(percentage: 10, quantity_threshold: 10, merchant_id: @merchant1.id)
     @discount_2 = Discount.create!(percentage: 5, quantity_threshold: 20, merchant_id: @merchant1.id)
-    @discount_3 = Discount.create!(percentage: 33, quantity_threshold: 90233, merchant_id: @merchant2.id)
+    @discount_3 = Discount.create!(percentage: 33, quantity_threshold: 10, merchant_id: @merchant2.id)
